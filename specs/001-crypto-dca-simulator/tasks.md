@@ -208,8 +208,8 @@ Based on plan.md, this is a single-page web application with structure:
 - [ ] T085 Run all integration tests from tests/integration/
 - [ ] T086 Verify all success criteria from spec.md (SC-001 through SC-008)
 - [ ] T087 Run quickstart.md validation following setup instructions
-- [ ] T088 Create azure-deploy.json configuration for Azure Blob Storage deployment
-- [ ] T089 Test deployment to Azure Blob Storage
+- [x] T088 Create azure-deploy.json configuration for Azure Blob Storage deployment
+- [x] T089 Test deployment to Azure Blob Storage
 - [ ] T090 Final constitution gates verification (all tests pass, coverage met, docs updated)
 
 ---
