@@ -31,7 +31,22 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+**Before Implementation**:
+
+- [ ] Spec defines acceptance tests (Principle II: Testing Standards)
+- [ ] Complexity justified if introducing new dependencies (Principle IV: Simplicity)
+- [ ] UX patterns consistent with existing tools (Principle III: User Experience Consistency)
+
+**During Implementation**:
+
+- [ ] Tests written first and fail before implementation (Principle II: Testing Standards)
+- [ ] Code reviews verify readability and single responsibility (Principle I: Code Quality)
+
+**Before Merge**:
+
+- [ ] All automated tests pass (Principle II: Testing Standards)
+- [ ] Code coverage meets minimum thresholds (80% general, 100% critical) (Principle II: Testing Standards)
+- [ ] Documentation updated if interfaces changed (Documentation Standards)
 
 ## Project Structure
 
