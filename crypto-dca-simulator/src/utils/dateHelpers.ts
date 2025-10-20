@@ -3,35 +3,39 @@
  * Handles date calculations for DCA simulation
  */
 
+import type { DCAFrequency } from '../types';
+
 // Constants for date calculations
 const MILLISECONDS_PER_DAY = 86400000; // 24 * 60 * 60 * 1000
+const MILLISECONDS_PER_SECOND = 1000;
 const DAYS_IN_WEEK = 7;
 const DAYS_IN_BIWEEK = 14;
+const MONTHS_PER_YEAR = 12;
 
 /**
  * Get the number of days between two dates
- * @param {Date|string} startDate - Start date
- * @param {Date|string} endDate - End date
- * @returns {number} Number of days between dates
+ * @param startDate - Start date
+ * @param endDate - End date
+ * @returns Number of days between dates
  */
-export function getDaysBetween(startDate, endDate) {
+export function getDaysBetween(startDate: Date | string, endDate: Date | string): number {
   const start = new Date(startDate);
   const end = new Date(endDate);
 
   start.setHours(0, 0, 0, 0);
   end.setHours(0, 0, 0, 0);
 
-  const diffMs = end - start;
+  const diffMs = end.getTime() - start.getTime();
   return Math.floor(diffMs / MILLISECONDS_PER_DAY);
 }
 
 /**
  * Add days to a date
- * @param {Date|string} date - Starting date
- * @param {number} days - Number of days to add
- * @returns {Date} New date with days added
+ * @param date - Starting date
+ * @param days - Number of days to add
+ * @returns New date with days added
  */
-export function addDays(date, days) {
+export function addDays(date: Date | string, days: number): Date {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;
@@ -39,11 +43,11 @@ export function addDays(date, days) {
 
 /**
  * Add months to a date
- * @param {Date|string} date - Starting date
- * @param {number} months - Number of months to add
- * @returns {Date} New date with months added
+ * @param date - Starting date
+ * @param months - Number of months to add
+ * @returns New date with months added
  */
-export function addMonths(date, months) {
+export function addMonths(date: Date | string, months: number): Date {
   const result = new Date(date);
   result.setMonth(result.getMonth() + months);
   return result;
@@ -51,10 +55,10 @@ export function addMonths(date, months) {
 
 /**
  * Check if a date is a weekend (Saturday or Sunday)
- * @param {Date|string} date - Date to check
- * @returns {boolean} True if date is a weekend
+ * @param date - Date to check
+ * @returns True if date is a weekend
  */
-export function isWeekend(date) {
+export function isWeekend(date: Date | string): boolean {
   const d = new Date(date);
   const dayOfWeek = d.getDay();
   const SATURDAY = 6;
@@ -64,10 +68,10 @@ export function isWeekend(date) {
 
 /**
  * Get the next business day (skip weekends)
- * @param {Date|string} date - Starting date
- * @returns {Date} Next business day
+ * @param date - Starting date
+ * @returns Next business day
  */
-export function getNextBusinessDay(date) {
+export function getNextBusinessDay(date: Date | string): Date {
   let result = new Date(date);
   
   while (isWeekend(result)) {
@@ -79,15 +83,19 @@ export function getNextBusinessDay(date) {
 
 /**
  * Generate purchase dates based on frequency
- * @param {Date|string} startDate - Start date for purchases
- * @param {Date|string} endDate - End date for purchases (default: today)
- * @param {string} frequency - Purchase frequency ('daily', 'weekly', 'biweekly', 'monthly')
- * @returns {Date[]} Array of purchase dates
+ * @param startDate - Start date for purchases
+ * @param endDate - End date for purchases (default: today)
+ * @param frequency - Purchase frequency ('daily', 'weekly', 'biweekly', 'monthly')
+ * @returns Array of purchase dates
  */
-export function generatePurchaseDates(startDate, endDate = new Date(), frequency) {
+export function generatePurchaseDates(
+  startDate: Date | string,
+  endDate: Date | string = new Date(),
+  frequency: DCAFrequency
+): Date[] {
   const start = new Date(startDate);
   const end = new Date(endDate);
-  const dates = [];
+  const dates: Date[] = [];
 
   // Set to beginning of day for consistent comparison
   start.setHours(0, 0, 0, 0);
@@ -122,10 +130,10 @@ export function generatePurchaseDates(startDate, endDate = new Date(), frequency
 
 /**
  * Format date to ISO string (YYYY-MM-DD)
- * @param {Date|string} date - Date to format
- * @returns {string} ISO formatted date string
+ * @param date - Date to format
+ * @returns ISO formatted date string
  */
-export function toISODateString(date) {
+export function toISODateString(date: Date | string): string {
   const d = new Date(date);
   
   if (isNaN(d.getTime())) {
@@ -141,33 +149,31 @@ export function toISODateString(date) {
 
 /**
  * Convert date to Unix timestamp (seconds)
- * @param {Date|string} date - Date to convert
- * @returns {number} Unix timestamp in seconds
+ * @param date - Date to convert
+ * @returns Unix timestamp in seconds
  */
-export function toUnixTimestamp(date) {
+export function toUnixTimestamp(date: Date | string): number {
   const d = new Date(date);
   
   if (isNaN(d.getTime())) {
     throw new Error('Invalid date');
   }
 
-  const MILLISECONDS_PER_SECOND = 1000;
   return Math.floor(d.getTime() / MILLISECONDS_PER_SECOND);
 }
 
 /**
  * Parse date from various formats to Date object
- * @param {Date|string|number} dateInput - Date input in various formats
- * @returns {Date} Parsed date object
+ * @param dateInput - Date input in various formats
+ * @returns Parsed date object
  */
-export function parseDate(dateInput) {
+export function parseDate(dateInput: Date | string | number): Date {
   if (dateInput instanceof Date) {
     return dateInput;
   }
 
   if (typeof dateInput === 'number') {
     // Assume Unix timestamp in seconds
-    const MILLISECONDS_PER_SECOND = 1000;
     return new Date(dateInput * MILLISECONDS_PER_SECOND);
   }
 
@@ -182,29 +188,32 @@ export function parseDate(dateInput) {
 
 /**
  * Get date range in human-readable format
- * @param {Date|string} startDate - Start date
- * @param {Date|string} endDate - End date
- * @returns {string} Formatted date range string
+ * @param startDate - Start date
+ * @param endDate - End date
+ * @returns Formatted date range string
  */
-export function formatDateRange(startDate, endDate) {
+export function formatDateRange(startDate: Date | string, endDate: Date | string): string {
   const start = new Date(startDate);
   const end = new Date(endDate);
 
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
   
   return `${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}`;
 }
 
 /**
  * Calculate the number of purchases for a given period and frequency
- * @param {Date|string} startDate - Start date
- * @param {Date|string} endDate - End date
- * @param {string} frequency - Purchase frequency
- * @returns {number} Estimated number of purchases
+ * @param startDate - Start date
+ * @param endDate - End date
+ * @param frequency - Purchase frequency
+ * @returns Estimated number of purchases
  */
-export function estimatePurchaseCount(startDate, endDate, frequency) {
+export function estimatePurchaseCount(
+  startDate: Date | string,
+  endDate: Date | string,
+  frequency: DCAFrequency
+): number {
   const days = getDaysBetween(startDate, endDate);
-  const MONTHS_PER_YEAR = 12;
 
   switch (frequency) {
     case 'daily':

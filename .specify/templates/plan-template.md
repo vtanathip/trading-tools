@@ -17,12 +17,13 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
+**Language/Version**: [e.g., TypeScript 5.x, Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., React, FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
 **Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Testing**: [e.g., Jest, pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., Node.js 20+, Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
 **Project Type**: [single/web/mobile - determines source structure]  
+**TypeScript Config**: [for JS/Node.js projects - e.g., strict mode enabled, target ES2022 or NEEDS CLARIFICATION]  
 **Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
 **Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
@@ -36,16 +37,20 @@
 - [ ] Spec defines acceptance tests (Principle II: Testing Standards)
 - [ ] Complexity justified if introducing new dependencies (Principle IV: Simplicity)
 - [ ] UX patterns consistent with existing tools (Principle III: User Experience Consistency)
+- [ ] TypeScript configured with strict mode for JavaScript/Node.js projects (Principle I: Code Quality - Type Safety)
 
 **During Implementation**:
 
 - [ ] Tests written first and fail before implementation (Principle II: Testing Standards)
 - [ ] Code reviews verify readability and single responsibility (Principle I: Code Quality)
+- [ ] TypeScript strict type checking passes with zero errors (Principle I: Code Quality - Type Safety)
 
 **Before Merge**:
 
 - [ ] All automated tests pass (Principle II: Testing Standards)
 - [ ] Code coverage meets minimum thresholds (80% general, 100% critical) (Principle II: Testing Standards)
+- [ ] TypeScript compilation (`tsc --noEmit`) passes with zero errors (Principle I: Code Quality - Type Safety)
+- [ ] Type coverage meets 95% minimum threshold (Principle I: Code Quality - Type Safety)
 - [ ] Documentation updated if interfaces changed (Documentation Standards)
 
 ## Project Structure

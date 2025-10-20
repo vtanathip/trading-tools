@@ -105,6 +105,10 @@
 <!--
   ACTION REQUIRED: Define measurable success criteria.
   These must be technology-agnostic and measurable.
+  
+  NOTE: For JavaScript/Node.js projects, TypeScript with strict mode is MANDATORY
+  per Constitution Principle I (Code Quality - Type Safety). This is a non-negotiable
+  technical constraint that applies to all JS/Node.js features.
 -->
 
 ### Measurable Outcomes
@@ -113,4 +117,11 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+
+### Technical Constraints (Constitution-Mandated)
+
+**For JavaScript/Node.js Projects**:
+- **TC-001**: All code MUST be written in TypeScript with `strict: true` configuration (Constitution Principle I)
+- **TC-002**: Type coverage MUST be ≥95% (Constitution Principle I)
+- **TC-003**: `tsc --noEmit` MUST pass with zero errors before merge (Constitution Principle I)
 

@@ -3,17 +3,19 @@
  * Validates user input according to specification requirements
  */
 
+import type { DCAFrequency } from '../types';
+
 const VALID_ASSET_PAIR_PATTERN = /^[A-Z]{3,5}-[A-Z]{3}$/;
 const MIN_INVESTMENT = 1;
 const MAX_INVESTMENT = 1000000;
-const VALID_FREQUENCIES = ['daily', 'weekly', 'biweekly', 'monthly'];
+const VALID_FREQUENCIES: readonly DCAFrequency[] = ['daily', 'weekly', 'biweekly', 'monthly'];
 
 /**
  * Validate asset pair format
- * @param {string} assetPair - Asset pair to validate (e.g., "BTC-USD")
- * @returns {{valid: boolean, error: string|null}}
+ * @param assetPair - Asset pair to validate (e.g., "BTC-USD")
+ * @returns Validation result with error message if invalid
  */
-export function validateAssetPair(assetPair) {
+export function validateAssetPair(assetPair: unknown): { valid: boolean; error: string | null } {
   if (!assetPair || typeof assetPair !== 'string') {
     return { valid: false, error: 'Asset pair is required' };
   }
@@ -30,10 +32,10 @@ export function validateAssetPair(assetPair) {
 
 /**
  * Validate investment amount
- * @param {number} amount - Investment amount to validate
- * @returns {{valid: boolean, error: string|null}}
+ * @param amount - Investment amount to validate
+ * @returns Validation result with error message if invalid
  */
-export function validateInvestmentAmount(amount) {
+export function validateInvestmentAmount(amount: unknown): { valid: boolean; error: string | null } {
   if (amount === null || amount === undefined) {
     return { valid: false, error: 'Investment amount is required' };
   }
@@ -60,15 +62,15 @@ export function validateInvestmentAmount(amount) {
 
 /**
  * Validate DCA frequency
- * @param {string} frequency - Frequency to validate
- * @returns {{valid: boolean, error: string|null}}
+ * @param frequency - Frequency to validate
+ * @returns Validation result with error message if invalid
  */
-export function validateFrequency(frequency) {
+export function validateFrequency(frequency: unknown): { valid: boolean; error: string | null } {
   if (!frequency) {
     return { valid: false, error: 'Frequency is required' };
   }
 
-  if (!VALID_FREQUENCIES.includes(frequency)) {
+  if (!VALID_FREQUENCIES.includes(frequency as DCAFrequency)) {
     return {
       valid: false,
       error: `Frequency must be one of: ${VALID_FREQUENCIES.join(', ')}`,
@@ -80,15 +82,15 @@ export function validateFrequency(frequency) {
 
 /**
  * Validate date string and check if it's not in the future
- * @param {string} dateString - Date string to validate (ISO 8601 format)
- * @returns {{valid: boolean, error: string|null}}
+ * @param dateString - Date string to validate (ISO 8601 format)
+ * @returns Validation result with error message if invalid
  */
-export function validateStartDate(dateString) {
+export function validateStartDate(dateString: unknown): { valid: boolean; error: string | null } {
   if (!dateString) {
     return { valid: false, error: 'Start date is required' };
   }
 
-  const date = new Date(dateString);
+  const date = new Date(dateString as string);
 
   if (isNaN(date.getTime())) {
     return { valid: false, error: 'Invalid date format' };
@@ -114,31 +116,54 @@ export function validateStartDate(dateString) {
 }
 
 /**
- * Validate complete simulation configuration
- * @param {Object} config - Simulation configuration object
- * @returns {{valid: boolean, errors: Object}}
+ * Simulation configuration for validation
  */
-export function validateSimulationConfig(config) {
-  const errors = {};
+export interface SimulationConfigInput {
+  assetPair?: unknown;
+  startDate?: unknown;
+  investmentAmount?: unknown;
+  frequency?: unknown;
+}
+
+/**
+ * Validation errors object
+ */
+export interface ValidationErrors {
+  assetPair?: string;
+  startDate?: string;
+  investmentAmount?: string;
+  frequency?: string;
+}
+
+/**
+ * Validate complete simulation configuration
+ * @param config - Simulation configuration object
+ * @returns Validation result with errors object
+ */
+export function validateSimulationConfig(config: SimulationConfigInput): {
+  valid: boolean;
+  errors: ValidationErrors;
+} {
+  const errors: ValidationErrors = {};
 
   const assetValidation = validateAssetPair(config.assetPair);
   if (!assetValidation.valid) {
-    errors.assetPair = assetValidation.error;
+    errors.assetPair = assetValidation.error || undefined;
   }
 
   const dateValidation = validateStartDate(config.startDate);
   if (!dateValidation.valid) {
-    errors.startDate = dateValidation.error;
+    errors.startDate = dateValidation.error || undefined;
   }
 
   const amountValidation = validateInvestmentAmount(config.investmentAmount);
   if (!amountValidation.valid) {
-    errors.investmentAmount = amountValidation.error;
+    errors.investmentAmount = amountValidation.error || undefined;
   }
 
   const frequencyValidation = validateFrequency(config.frequency);
   if (!frequencyValidation.valid) {
-    errors.frequency = frequencyValidation.error;
+    errors.frequency = frequencyValidation.error || undefined;
   }
 
   return {

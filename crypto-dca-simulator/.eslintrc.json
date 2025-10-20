@@ -36,6 +36,15 @@
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
   },
+  "overrides": [
+    {
+      "files": ["tests/**/*.js", "**/*.test.js"],
+      "rules": {
+        "no-magic-numbers": "off",
+        "max-lines-per-function": "off"
+      }
+    }
+  ],
   "settings": {
     "react": {
       "version": "detect"

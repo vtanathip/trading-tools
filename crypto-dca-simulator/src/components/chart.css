@@ -1,0 +1,79 @@
+/**
+ * Chart display styles
+ * White theme customization for Chart.js
+ */
+
+.chart-container {
+  background: var(--color-bg);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  margin: var(--spacing-lg) 0;
+}
+
+.chart-title {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 400px;
+  width: 100%;
+}
+
+.chart-loading,
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: var(--color-text-secondary);
+  font-size: 1.125rem;
+}
+
+.chart-loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chart-container {
+    padding: var(--spacing-md);
+  }
+
+  .chart-wrapper {
+    height: 300px;
+  }
+
+  .chart-title {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .chart-wrapper {
+    height: 250px;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+  }
+}
+
+/* Chart.js custom styling */
+canvas {
+  max-width: 100%;
+  height: auto !important;
+}

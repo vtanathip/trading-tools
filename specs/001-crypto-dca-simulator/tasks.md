@@ -55,11 +55,11 @@ Based on plan.md, this is a single-page web application with structure:
 - [x] T017 [P] Create src/utils/dateHelpers.js with date manipulation and purchase schedule generation functions
 - [x] T018 Create src/services/cacheManager.js with LocalStorage management (get, set, isValid, clearExpired, evictLRU)
 - [x] T019 Create src/services/priceApi.js with CoinGecko API client (getHistoricalPrices, getCurrentPrice, getCoinsList, rate limiting)
-- [ ] T020 Create tests/contract/priceApi.test.js with API contract tests for CoinGecko endpoints
-- [ ] T021 Create tests/unit/validators.test.js testing all validation rules from data-model.md
-- [ ] T022 [P] Create tests/unit/formatters.test.js testing currency and number formatting edge cases
-- [ ] T023 [P] Create tests/unit/dateHelpers.test.js testing date calculations and schedule generation
-- [ ] T024 Create tests/unit/cacheManager.test.js testing cache operations, TTL, and LRU eviction
+- [x] T020 Create tests/contract/priceApi.test.js with API contract tests for CoinGecko endpoints
+- [x] T021 Create tests/unit/validators.test.js testing all validation rules from data-model.md
+- [x] T022 [P] Create tests/unit/formatters.test.js testing currency and number formatting edge cases
+- [x] T023 [P] Create tests/unit/dateHelpers.test.js testing date calculations and schedule generation
+- [x] T024 Create tests/unit/cacheManager.test.js testing cache operations, TTL, and LRU eviction
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -73,25 +73,25 @@ Based on plan.md, this is a single-page web application with structure:
 
 ### Critical Service for User Story 1 (100% Coverage Required)
 
-- [ ] T025 Create tests/unit/dcaCalculator.test.js with comprehensive test cases (valid inputs, edge cases, missing data, large datasets, boundary conditions) - MUST FAIL initially
-- [ ] T026 [US1] Create src/services/dcaCalculator.js implementing DCACalculatorService interface (calculateSimulation, calculatePortfolioValue, generatePurchaseSchedule)
+- [x] T025 Create tests/unit/dcaCalculator.test.js with comprehensive test cases (valid inputs, edge cases, missing data, large datasets, boundary conditions) - MUST FAIL initially
+- [x] T026 [US1] Create src/services/dcaCalculator.js implementing DCACalculatorService interface (calculateSimulation, calculatePortfolioValue, generatePurchaseSchedule)
 
 ### Components for User Story 1
 
-- [ ] T027 [P] [US1] Create tests/unit/SimulatorForm.test.js testing form validation and submission
-- [ ] T028 [P] [US1] Create src/components/SimulatorForm.js with input fields (asset pair dropdown, date picker, amount input, frequency selector) and validation
-- [ ] T029 [P] [US1] Create src/styles/simulator.css with form styles matching white theme
-- [ ] T030 [US1] Create tests/unit/ChartDisplay.test.js testing Chart.js rendering and data display
-- [ ] T031 [US1] Create src/components/ChartDisplay.js wrapping Chart.js with line graph configuration
-- [ ] T032 [P] [US1] Create src/styles/chart.css with chart customization for white theme
-- [ ] T033 [P] [US1] Create tests/unit/ResultsSummary.test.js testing metrics display and formatting
-- [ ] T034 [P] [US1] Create src/components/ResultsSummary.js displaying total invested, current value, profit/loss, profit/loss percent
+- [x] T027 [P] [US1] Create tests/unit/SimulatorForm.test.js testing form validation and submission
+- [x] T028 [P] [US1] Create src/components/SimulatorForm.js with input fields (asset pair dropdown, date picker, amount input, frequency selector) and validation
+- [x] T029 [P] [US1] Create src/styles/simulator.css with form styles matching white theme
+- [x] T030 [US1] Create tests/unit/ChartDisplay.test.js testing Chart.js rendering and data display
+- [x] T031 [US1] Create src/components/ChartDisplay.js wrapping Chart.js with line graph configuration
+- [x] T032 [P] [US1] Create src/styles/chart.css with chart customization for white theme
+- [x] T033 [P] [US1] Create tests/unit/ResultsSummary.test.js testing metrics display and formatting
+- [x] T034 [P] [US1] Create src/components/ResultsSummary.js displaying total invested, current value, profit/loss, profit/loss percent
 
 ### Integration for User Story 1
 
-- [ ] T035 [US1] Create src/App.js main component integrating SimulatorForm, ChartDisplay, and ResultsSummary with state management
-- [ ] T036 [US1] Create tests/integration/simulation.test.js with end-to-end simulation flow test using Playwright
-- [ ] T037 [US1] Verify all acceptance scenarios from spec.md User Story 1 pass
+- [x] T035 [US1] Create src/App.js main component integrating SimulatorForm, ChartDisplay, and ResultsSummary with state management
+- [x] T036 [US1] Create tests/integration/simulation.test.js with end-to-end simulation flow test using Playwright
+- [x] T037 [US1] Verify all acceptance scenarios from spec.md User Story 1 pass
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently - MVP READY
 

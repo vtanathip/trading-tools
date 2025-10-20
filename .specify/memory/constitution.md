@@ -1,19 +1,20 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version Change: Template → 1.0.0
-Modified Principles: All principles newly defined
-Added Sections:
-  - Core Principles (4 principles)
-  - Documentation Standards
-  - Development Workflow
-  - Governance
-Removed Sections: None (initial version)
+Version Change: 1.0.0 → 1.1.0
+Modified Principles:
+  - Principle I (Code Quality): Type Safety expanded to MANDATE TypeScript for JavaScript/Node.js projects
+Added Sections: None
+Removed Sections: None
 Templates Requiring Updates:
-  ✅ plan-template.md - Constitution Check section aligns with principles
-  ✅ spec-template.md - User scenario format supports UX consistency
-  ✅ tasks-template.md - Test-first approach reflected in task ordering
-Follow-up TODOs: None
+  ✅ plan-template.md - UPDATED: Added TypeScript configuration field and type checking gates
+  ✅ spec-template.md - UPDATED: Added Technical Constraints section mandating TypeScript
+  ✅ tasks-template.md - UPDATED: Added TypeScript setup tasks in Phase 1
+  ✅ Constitution Check gates updated to enforce TypeScript compliance
+Follow-up TODOs:
+  - Migrate crypto-dca-simulator from JavaScript to TypeScript (tracking required)
+  - Update ESLint configuration templates to include TypeScript parser
+  - Add TypeScript version requirements to project setup documentation
 -->
 
 # Trading Tools Constitution
@@ -28,10 +29,15 @@ Code MUST be clean, readable, and maintainable at all times:
 - **Single Responsibility**: Each function, class, or module MUST have one clear purpose. If you cannot describe it in one sentence, it needs refactoring.
 - **DRY Principle**: Do not repeat yourself. Extract common logic into reusable functions or utilities.
 - **No Magic Numbers**: All constants MUST be named and documented. Use configuration files or enums for values that may change.
-- **Type Safety**: Use type hints (Python), TypeScript (JavaScript), or language-appropriate type systems to catch errors early.
+- **Type Safety (MANDATORY)**:
+  - **TypeScript Required**: All JavaScript/Node.js projects MUST use TypeScript exclusively. Plain JavaScript (.js) files are NOT permitted except for configuration files (e.g., jest.config.js, .eslintrc.js) where TypeScript support is limited.
+  - **Strict Mode**: TypeScript MUST be configured with `strict: true` in tsconfig.json. No implicit any types allowed.
+  - **Type Coverage**: Minimum 95% type coverage. Use `any` or `unknown` types only with explicit justification and tracking ticket.
+  - **Python Projects**: Use type hints with mypy in strict mode.
+  - **No Type Escape Hatches**: Avoid `@ts-ignore`, `@ts-expect-error`, or type assertions (`as`) without documented justification.
 - **Code Reviews Required**: All code changes MUST be reviewed by at least one other developer before merging.
 
-**Rationale**: Trading tools handle financial data and decisions. Poor code quality leads to bugs that can result in financial losses. Clean code is easier to audit, test, and maintain.
+**Rationale**: Trading tools handle financial data and decisions. Type safety catches entire classes of bugs at compile time (null/undefined errors, type mismatches, incorrect function calls) before they reach production. TypeScript's static analysis provides documentation through types and enables powerful IDE features (autocomplete, refactoring, navigation). Plain JavaScript's dynamic typing creates maintenance burden and hides bugs until runtime—unacceptable for financial tools.
 
 ### II. Testing Standards (NON-NEGOTIABLE)
 
@@ -121,8 +127,11 @@ All feature work MUST pass these gates:
 
 ### Quality Gates
 
-- **Linting**: All code MUST pass linting (language-specific: pylint/black for Python, ESLint/Prettier for JavaScript).
-- **Type Checking**: All code MUST pass type checking where applicable (mypy for Python, TypeScript for JavaScript).
+- **Linting**: All code MUST pass linting (language-specific: pylint/black for Python, ESLint/Prettier for TypeScript).
+- **Type Checking**: All code MUST pass strict type checking without errors:
+  - TypeScript projects: `tsc --noEmit` with `strict: true` MUST pass with zero errors
+  - Python projects: `mypy --strict` MUST pass with zero errors
+  - Type coverage reports MUST be generated and tracked
 - **Security Scanning**: Dependencies MUST be scanned for known vulnerabilities. High/Critical CVEs MUST be addressed before merge.
 - **Performance Baseline**: Critical paths (data processing, calculations) MUST maintain or improve performance benchmarks.
 
@@ -156,4 +165,4 @@ This constitution supersedes all other development practices and guidelines.
 - **Continuous**: Monitor test coverage, code quality metrics, documentation freshness
 - **Retrospectives**: Evaluate if principles support or hinder development velocity
 
-**Version**: 1.0.0 | **Ratified**: 2025-10-20 | **Last Amended**: 2025-10-20
+**Version**: 1.1.0 | **Ratified**: 2025-10-20 | **Last Amended**: 2025-10-20

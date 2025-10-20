@@ -47,7 +47,9 @@ description: "Task list template for feature implementation"
 
 - [ ] T001 Create project structure per implementation plan
 - [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T003 [P] Configure TypeScript with strict mode (for JS/Node.js projects) - tsconfig.json with `"strict": true`
+- [ ] T004 [P] Configure linting and formatting tools (ESLint for TypeScript, Prettier)
+- [ ] T005 [P] Setup type checking in CI/CD pipeline (`tsc --noEmit` must pass)
 
 ---
 
@@ -59,12 +61,13 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+- [ ] T006 Setup database schema and migrations framework
+- [ ] T007 [P] Implement authentication/authorization framework
+- [ ] T008 [P] Setup API routing and middleware structure
+- [ ] T009 Create base models/entities with TypeScript interfaces that all stories depend on
+- [ ] T010 Configure error handling and logging infrastructure
+- [ ] T011 Setup environment configuration management
+- [ ] T012 [P] Create shared TypeScript types and interfaces in types/ directory (for JS/Node.js projects)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

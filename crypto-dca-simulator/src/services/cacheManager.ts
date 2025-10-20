@@ -9,19 +9,48 @@ const MAX_CACHE_SIZE_BYTES = 5242880; // 5MB (typical LocalStorage limit is 5-10
 const EVICTION_THRESHOLD = 0.8; // 80% capacity trigger
 
 /**
- * Generate cache key with prefix
- * @param {string} key - Cache key
- * @returns {string} Prefixed cache key
+ * Cache data structure with TTL
  */
-function getCacheKey(key) {
+interface CacheData<T = unknown> {
+  value: T;
+  timestamp: number;
+  expiresAt: number;
+}
+
+/**
+ * Cache entry with metadata
+ */
+interface CacheEntryMeta {
+  key: string;
+  timestamp: number;
+}
+
+/**
+ * Cache statistics
+ */
+export interface CacheStats {
+  totalEntries: number;
+  validEntries: number;
+  expiredEntries: number;
+  totalSizeBytes: number;
+  maxSizeBytes: number;
+  utilizationPercent: number;
+}
+
+/**
+ * Generate cache key with prefix
+ * @param key - Cache key
+ * @returns Prefixed cache key
+ */
+function getCacheKey(key: string): string {
   return `${CACHE_PREFIX}${key}`;
 }
 
 /**
  * Get the current size of cache in bytes (approximate)
- * @returns {number} Approximate cache size in bytes
+ * @returns Approximate cache size in bytes
  */
-function getCacheSize() {
+function getCacheSize(): number {
   let totalSize = 0;
   
   for (let i = 0; i < localStorage.length; i++) {
@@ -38,16 +67,19 @@ function getCacheSize() {
 
 /**
  * Get all cache entries with their timestamps
- * @returns {Array<{key: string, timestamp: number}>} Array of cache entries
+ * @returns Array of cache entries
  */
-function getCacheEntries() {
-  const entries = [];
+function getCacheEntries(): CacheEntryMeta[] {
+  const entries: CacheEntryMeta[] = [];
   
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key && key.startsWith(CACHE_PREFIX)) {
       try {
-        const data = JSON.parse(localStorage.getItem(key) || '{}');
+        const item = localStorage.getItem(key);
+        if (!item) continue;
+        
+        const data = JSON.parse(item) as CacheData;
         entries.push({
           key: key,
           timestamp: data.timestamp || 0,
@@ -64,9 +96,9 @@ function getCacheEntries() {
 
 /**
  * Evict least recently used (LRU) cache entries
- * @param {number} targetSize - Target cache size after eviction
+ * @param targetSize - Target cache size after eviction
  */
-function evictLRU(targetSize = MAX_CACHE_SIZE_BYTES * EVICTION_THRESHOLD) {
+function evictLRU(targetSize: number = MAX_CACHE_SIZE_BYTES * EVICTION_THRESHOLD): void {
   const entries = getCacheEntries();
   
   // Sort by timestamp (oldest first)
@@ -87,15 +119,15 @@ function evictLRU(targetSize = MAX_CACHE_SIZE_BYTES * EVICTION_THRESHOLD) {
 
 /**
  * Set item in cache with TTL
- * @param {string} key - Cache key
- * @param {*} value - Value to cache (will be JSON serialized)
- * @param {number} ttlMs - Time to live in milliseconds (default: 24 hours)
- * @returns {boolean} Success status
+ * @param key - Cache key
+ * @param value - Value to cache (will be JSON serialized)
+ * @param ttlMs - Time to live in milliseconds (default: 24 hours)
+ * @returns Success status
  */
-export function set(key, value, ttlMs = DEFAULT_TTL_MS) {
+export function set<T>(key: string, value: T, ttlMs: number = DEFAULT_TTL_MS): boolean {
   try {
     const cacheKey = getCacheKey(key);
-    const data = {
+    const data: CacheData<T> = {
       value: value,
       timestamp: Date.now(),
       expiresAt: Date.now() + ttlMs,
@@ -111,12 +143,12 @@ export function set(key, value, ttlMs = DEFAULT_TTL_MS) {
     return true;
   } catch (error) {
     // Handle quota exceeded error
-    if (error.name === 'QuotaExceededError') {
+    if (error instanceof Error && error.name === 'QuotaExceededError') {
       evictLRU(MAX_CACHE_SIZE_BYTES / 2); // More aggressive eviction
       
       try {
         const cacheKey = getCacheKey(key);
-        const data = {
+        const data: CacheData<T> = {
           value: value,
           timestamp: Date.now(),
           expiresAt: Date.now() + ttlMs,
@@ -136,10 +168,10 @@ export function set(key, value, ttlMs = DEFAULT_TTL_MS) {
 
 /**
  * Get item from cache if valid
- * @param {string} key - Cache key
- * @returns {*|null} Cached value or null if not found/expired
+ * @param key - Cache key
+ * @returns Cached value or null if not found/expired
  */
-export function get(key) {
+export function get<T>(key: string): T | null {
   try {
     const cacheKey = getCacheKey(key);
     const item = localStorage.getItem(cacheKey);
@@ -148,7 +180,7 @@ export function get(key) {
       return null;
     }
     
-    const data = JSON.parse(item);
+    const data = JSON.parse(item) as CacheData<T>;
     
     // Check if expired
     if (Date.now() > data.expiresAt) {
@@ -165,10 +197,10 @@ export function get(key) {
 
 /**
  * Check if cache entry is valid (exists and not expired)
- * @param {string} key - Cache key
- * @returns {boolean} True if cache entry is valid
+ * @param key - Cache key
+ * @returns True if cache entry is valid
  */
-export function isValid(key) {
+export function isValid(key: string): boolean {
   try {
     const cacheKey = getCacheKey(key);
     const item = localStorage.getItem(cacheKey);
@@ -177,7 +209,7 @@ export function isValid(key) {
       return false;
     }
     
-    const data = JSON.parse(item);
+    const data = JSON.parse(item) as CacheData;
     return Date.now() <= data.expiresAt;
   } catch (error) {
     return false;
@@ -186,16 +218,19 @@ export function isValid(key) {
 
 /**
  * Clear expired cache entries
- * @returns {number} Number of entries cleared
+ * @returns Number of entries cleared
  */
-export function clearExpired() {
+export function clearExpired(): number {
   const entries = getCacheEntries();
   const now = Date.now();
   let clearedCount = 0;
   
   for (const entry of entries) {
     try {
-      const data = JSON.parse(localStorage.getItem(entry.key) || '{}');
+      const item = localStorage.getItem(entry.key);
+      if (!item) continue;
+      
+      const data = JSON.parse(item) as CacheData;
       if (now > data.expiresAt) {
         localStorage.removeItem(entry.key);
         clearedCount++;
@@ -212,9 +247,9 @@ export function clearExpired() {
 
 /**
  * Clear all cache entries
- * @returns {number} Number of entries cleared
+ * @returns Number of entries cleared
  */
-export function clearAll() {
+export function clearAll(): number {
   const entries = getCacheEntries();
   
   for (const entry of entries) {
@@ -226,16 +261,19 @@ export function clearAll() {
 
 /**
  * Get cache statistics
- * @returns {Object} Cache statistics
+ * @returns Cache statistics
  */
-export function getStats() {
+export function getStats(): CacheStats {
   const entries = getCacheEntries();
   const totalSize = getCacheSize();
   const now = Date.now();
   
   const expiredCount = entries.filter((entry) => {
     try {
-      const data = JSON.parse(localStorage.getItem(entry.key) || '{}');
+      const item = localStorage.getItem(entry.key);
+      if (!item) return true;
+      
+      const data = JSON.parse(item) as CacheData;
       return now > data.expiresAt;
     } catch (error) {
       return true;

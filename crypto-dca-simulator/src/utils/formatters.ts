@@ -5,12 +5,12 @@
 
 /**
  * Format number as currency (USD by default)
- * @param {number} value - Number to format
- * @param {string} currency - Currency code (default: 'USD')
- * @param {number} decimals - Number of decimal places (default: 2)
- * @returns {string} Formatted currency string
+ * @param value - Number to format
+ * @param currency - Currency code (default: 'USD')
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Formatted currency string
  */
-export function formatCurrency(value, currency = 'USD', decimals = 2) {
+export function formatCurrency(value: number, currency: string = 'USD', decimals: number = 2): string {
   if (value === null || value === undefined || isNaN(value)) {
     return '$0.00';
   }
@@ -30,11 +30,11 @@ export function formatCurrency(value, currency = 'USD', decimals = 2) {
 
 /**
  * Format number with comma separators
- * @param {number} value - Number to format
- * @param {number} decimals - Number of decimal places (default: 2)
- * @returns {string} Formatted number string
+ * @param value - Number to format
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Formatted number string
  */
-export function formatNumber(value, decimals = 2) {
+export function formatNumber(value: number, decimals: number = 2): string {
   if (value === null || value === undefined || isNaN(value)) {
     return '0';
   }
@@ -47,11 +47,11 @@ export function formatNumber(value, decimals = 2) {
 
 /**
  * Format percentage value
- * @param {number} value - Percentage value (e.g., 25.5 for 25.5%)
- * @param {number} decimals - Number of decimal places (default: 2)
- * @returns {string} Formatted percentage string
+ * @param value - Percentage value (e.g., 25.5 for 25.5%)
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Formatted percentage string
  */
-export function formatPercentage(value, decimals = 2) {
+export function formatPercentage(value: number, decimals: number = 2): string {
   if (value === null || value === undefined || isNaN(value)) {
     return '0.00%';
   }
@@ -64,15 +64,15 @@ const CRYPTO_DECIMALS = {
   BTC_PRECISION: 8,
   ETH_PRECISION: 6,
   DEFAULT_PRECISION: 4,
-};
+} as const;
 
 /**
  * Format cryptocurrency quantity with appropriate precision
- * @param {number} value - Quantity to format
- * @param {string} asset - Asset symbol (e.g., 'BTC', 'ETH')
- * @returns {string} Formatted quantity string
+ * @param value - Quantity to format
+ * @param asset - Asset symbol (e.g., 'BTC', 'ETH')
+ * @returns Formatted quantity string
  */
-export function formatCryptoQuantity(value, asset = 'BTC') {
+export function formatCryptoQuantity(value: number, asset: string = 'BTC'): string {
   if (value === null || value === undefined || isNaN(value)) {
     return '0';
   }
@@ -82,7 +82,7 @@ export function formatCryptoQuantity(value, asset = 'BTC') {
   // Ethereum and similar: 6 decimal places
   const ethLike = ['ETH', 'BNB'];
   
-  let decimals = CRYPTO_DECIMALS.DEFAULT_PRECISION;
+  let decimals: number = CRYPTO_DECIMALS.DEFAULT_PRECISION;
   
   if (btcLike.includes(asset)) {
     decimals = CRYPTO_DECIMALS.BTC_PRECISION;
@@ -100,15 +100,15 @@ const COMPACT_NUMBER_THRESHOLDS = {
   BILLION: 1000000000,
   MILLION: 1000000,
   THOUSAND: 1000,
-};
+} as const;
 
 /**
  * Format large numbers with compact notation (K, M, B)
- * @param {number} value - Number to format
- * @param {number} decimals - Number of decimal places (default: 1)
- * @returns {string} Formatted compact number string
+ * @param value - Number to format
+ * @param decimals - Number of decimal places (default: 1)
+ * @returns Formatted compact number string
  */
-export function formatCompactNumber(value, decimals = 1) {
+export function formatCompactNumber(value: number, decimals: number = 1): string {
   if (value === null || value === undefined || isNaN(value)) {
     return '0';
   }
@@ -129,12 +129,17 @@ export function formatCompactNumber(value, decimals = 1) {
 }
 
 /**
- * Format date to locale string
- * @param {Date|string|number} date - Date to format
- * @param {string} format - Format style ('short', 'medium', 'long')
- * @returns {string} Formatted date string
+ * Date format options
  */
-export function formatDate(date, format = 'medium') {
+type DateFormat = 'short' | 'medium' | 'long';
+
+/**
+ * Format date to locale string
+ * @param date - Date to format
+ * @param format - Format style ('short', 'medium', 'long')
+ * @returns Formatted date string
+ */
+export function formatDate(date: Date | string | number, format: DateFormat = 'medium'): string {
   if (!date) {
     return '';
   }
@@ -145,7 +150,7 @@ export function formatDate(date, format = 'medium') {
     return 'Invalid Date';
   }
 
-  const options = {
+  const options: Record<DateFormat, Intl.DateTimeFormatOptions> = {
     short: { year: 'numeric', month: '2-digit', day: '2-digit' },
     medium: { year: 'numeric', month: 'short', day: 'numeric' },
     long: { year: 'numeric', month: 'long', day: 'numeric' },
@@ -156,10 +161,10 @@ export function formatDate(date, format = 'medium') {
 
 /**
  * Parse currency string to number
- * @param {string} currencyString - Currency string (e.g., "$1,234.56")
- * @returns {number} Parsed number value
+ * @param currencyString - Currency string (e.g., "$1,234.56")
+ * @returns Parsed number value
  */
-export function parseCurrency(currencyString) {
+export function parseCurrency(currencyString: string): number {
   if (!currencyString) {
     return 0;
   }
