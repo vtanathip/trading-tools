@@ -49,7 +49,18 @@ export function addDays(date: Date | string, days: number): Date {
  */
 export function addMonths(date: Date | string, months: number): Date {
   const result = new Date(date);
+  const originalDay = result.getDate();
+  
+  // Set to first of month to avoid day overflow issues
+  result.setDate(1);
   result.setMonth(result.getMonth() + months);
+  
+  // Get the last day of the target month
+  const lastDayOfTargetMonth = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
+  
+  // Set the day to the minimum of original day or last day of target month
+  result.setDate(Math.min(originalDay, lastDayOfTargetMonth));
+  
   return result;
 }
 

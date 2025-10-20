@@ -5,7 +5,7 @@
 
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = 'http://localhost:5173';
+const BASE_URL = 'http://localhost:3000';
 
 test.describe('DCA Simulation E2E', () => {
   test.beforeEach(async ({ page }) => {
@@ -46,7 +46,7 @@ test.describe('DCA Simulation E2E', () => {
     await page.click('button[type="submit"]');
 
     // Should show validation errors
-    await expect(page.locator('.form-error')).toBeVisible();
+    await expect(page.locator('.error-message')).toBeVisible();
   });
 
   test('should show error for future date', async ({ page }) => {
@@ -57,7 +57,7 @@ test.describe('DCA Simulation E2E', () => {
 
     await page.click('button[type="submit"]');
 
-    await expect(page.locator('.form-error')).toContainText(/date cannot be in the future/i);
+    await expect(page.locator('.error-message')).toContainText(/date cannot be in the future/i);
   });
 
   test('should allow running another simulation', async ({ page }) => {

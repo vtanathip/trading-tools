@@ -13,9 +13,19 @@ import {
 
 describe('validateAssetPair', () => {
   it('should accept valid asset pairs', () => {
+    // Original supported pairs
     expect(validateAssetPair('BTC-USD').valid).toBe(true);
     expect(validateAssetPair('ETH-USD').valid).toBe(true);
+    expect(validateAssetPair('BTC-EUR').valid).toBe(true);
+    expect(validateAssetPair('ETH-EUR').valid).toBe(true);
+    
+    // Additional supported pairs
+    expect(validateAssetPair('BNB-USD').valid).toBe(true);
+    expect(validateAssetPair('ADA-USD').valid).toBe(true);
     expect(validateAssetPair('SOL-USD').valid).toBe(true);
+    expect(validateAssetPair('XRP-USD').valid).toBe(true);
+    expect(validateAssetPair('DOT-USD').valid).toBe(true);
+    expect(validateAssetPair('DOGE-USD').valid).toBe(true);
   });
 
   it('should reject invalid formats', () => {
@@ -25,8 +35,9 @@ describe('validateAssetPair', () => {
   });
 
   it('should reject invalid currencies', () => {
-    expect(validateAssetPair('BTC-EUR').valid).toBe(false);
     expect(validateAssetPair('XYZ-USD').valid).toBe(false);
+    expect(validateAssetPair('BTC-JPY').valid).toBe(false);
+    expect(validateAssetPair('ABC-DEF').valid).toBe(false);
   });
 
   it('should reject missing input', () => {

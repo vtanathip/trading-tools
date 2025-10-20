@@ -10,8 +10,11 @@
   --color-error: #ef4444;
   --color-bg: #ffffff;
   --color-bg-secondary: #f8fafc;
+  --color-surface: #ffffff;
   --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
   --color-text: #0f172a;
+  --color-text-primary: #0f172a;
   --color-text-secondary: #64748b;
   --color-text-muted: #94a3b8;
   
@@ -29,6 +32,7 @@
   --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   
   /* Border Radius */
+  --border-radius: 0.5rem;
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 1rem;

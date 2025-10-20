@@ -36,7 +36,7 @@ export function formatCurrency(value: number, currency: string = 'USD', decimals
  */
 export function formatNumber(value: number, decimals: number = 2): string {
   if (value === null || value === undefined || isNaN(value)) {
-    return '0';
+    return decimals > 0 ? '0.00' : '0';
   }
 
   return new Intl.NumberFormat('en-US', {
@@ -113,16 +113,24 @@ export function formatCompactNumber(value: number, decimals: number = 1): string
     return '0';
   }
 
+  // Special case for zero
+  if (value === 0) {
+    return '0';
+  }
+
   const absValue = Math.abs(value);
 
   if (absValue >= COMPACT_NUMBER_THRESHOLDS.BILLION) {
-    return `${(value / COMPACT_NUMBER_THRESHOLDS.BILLION).toFixed(decimals)}B`;
+    const result = Math.round((value / COMPACT_NUMBER_THRESHOLDS.BILLION) * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return `${result.toFixed(decimals)}B`;
   }
   if (absValue >= COMPACT_NUMBER_THRESHOLDS.MILLION) {
-    return `${(value / COMPACT_NUMBER_THRESHOLDS.MILLION).toFixed(decimals)}M`;
+    const result = Math.round((value / COMPACT_NUMBER_THRESHOLDS.MILLION) * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return `${result.toFixed(decimals)}M`;
   }
   if (absValue >= COMPACT_NUMBER_THRESHOLDS.THOUSAND) {
-    return `${(value / COMPACT_NUMBER_THRESHOLDS.THOUSAND).toFixed(decimals)}K`;
+    const result = Math.round((value / COMPACT_NUMBER_THRESHOLDS.THOUSAND) * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return `${result.toFixed(decimals)}K`;
   }
 
   return formatNumber(value, decimals);

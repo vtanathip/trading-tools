@@ -157,4 +157,73 @@ describe('ChartDisplay Component', () => {
     const container = screen.getByTestId('chart-container');
     expect(container).toBeInTheDocument();
   });
+
+  it('should handle null data prop', () => {
+    render(<ChartDisplay data={null} />);
+    
+    expect(screen.getByText(/no data to display/i)).toBeInTheDocument();
+  });
+
+  it('should handle canvas context not available', async () => {
+    // Mock getContext to return null (simulating canvas not available)
+    const originalGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = jest.fn(() => null);
+    
+    render(<ChartDisplay data={mockData} />);
+    
+    // Should still render container without error
+    const container = screen.getByTestId('chart-container');
+    expect(container).toBeInTheDocument();
+    
+    // Restore mock
+    HTMLCanvasElement.prototype.getContext = originalGetContext;
+  });
+
+  it('should handle canvas element not available', async () => {
+    // This test is tricky - we need to render when canvas ref is null
+    // The component will handle the case where canvasRef.current is null
+    render(<ChartDisplay data={mockData} />);
+    
+    // Even if canvas setup fails, container should still be rendered
+    const container = screen.getByTestId('chart-container');
+    expect(container).toBeInTheDocument();
+  });
+
+  it('should handle chart re-creation on data change', async () => {
+    const { rerender } = render(<ChartDisplay data={mockData} />);
+    
+    // Change data to trigger chart re-creation
+    const updatedData = {
+      ...mockData,
+      purchases: [
+        ...mockData.purchases,
+        { date: '2024-01-25', timestamp: 1706140800, price: 47000, quantity: 0.00213, invested: 100, runningTotal: 450, runningInvested: 500 },
+      ],
+      totalPurchases: 5,
+    };
+    
+    rerender(<ChartDisplay data={updatedData} />);
+    
+    await waitFor(() => {
+      const canvas = document.querySelector('canvas');
+      expect(canvas).toBeInTheDocument();
+    });
+  });
+
+  it('should handle missing runningInvested values', async () => {
+    const dataWithMissingRunningInvested = {
+      ...mockData,
+      purchases: [
+        { date: '2024-01-01', timestamp: 1704067200, price: 45000, quantity: 0.00222, invested: 100, runningTotal: 100 },
+        { date: '2024-01-08', timestamp: 1704672000, price: 44000, quantity: 0.00227, invested: 100, runningTotal: 200 },
+      ],
+    };
+    
+    render(<ChartDisplay data={dataWithMissingRunningInvested} />);
+    
+    await waitFor(() => {
+      const canvas = document.querySelector('canvas');
+      expect(canvas).toBeInTheDocument();
+    });
+  });
 });

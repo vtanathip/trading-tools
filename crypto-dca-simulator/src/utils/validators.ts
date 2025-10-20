@@ -10,6 +10,13 @@ const MIN_INVESTMENT = 1;
 const MAX_INVESTMENT = 1000000;
 const VALID_FREQUENCIES: readonly DCAFrequency[] = ['daily', 'weekly', 'biweekly', 'monthly'];
 
+// Supported trading pairs - matches SimulatorForm options
+const SUPPORTED_PAIRS = new Set([
+  'BTC-USD', 'BTC-EUR', 'ETH-USD', 'ETH-EUR',
+  'BNB-USD', 'ADA-USD', 'SOL-USD', 'XRP-USD', 
+  'DOT-USD', 'DOGE-USD'
+]);
+
 /**
  * Validate asset pair format
  * @param assetPair - Asset pair to validate (e.g., "BTC-USD")
@@ -24,6 +31,14 @@ export function validateAssetPair(assetPair: unknown): { valid: boolean; error: 
     return {
       valid: false,
       error: 'Asset pair must be in format XXX-YYY (e.g., BTC-USD, ETH-EUR)',
+    };
+  }
+
+  // Check if it's one of the supported pairs per spec FR-001
+  if (!SUPPORTED_PAIRS.has(assetPair)) {
+    return {
+      valid: false,
+      error: `Unsupported asset pair. Supported pairs: ${Array.from(SUPPORTED_PAIRS).join(', ')}`,
     };
   }
 
@@ -47,13 +62,13 @@ export function validateInvestmentAmount(amount: unknown): { valid: boolean; err
   }
 
   if (numAmount < MIN_INVESTMENT) {
-    return { valid: false, error: `Investment amount must be at least $${MIN_INVESTMENT}` };
+    return { valid: false, error: `Investment amount must be at least $${MIN_INVESTMENT} (minimum required)` };
   }
 
   if (numAmount > MAX_INVESTMENT) {
     return {
       valid: false,
-      error: `Investment amount cannot exceed $${MAX_INVESTMENT.toLocaleString()}`,
+      error: `Investment amount cannot exceed $${MAX_INVESTMENT.toLocaleString()} (maximum allowed)`,
     };
   }
 
@@ -98,8 +113,11 @@ export function validateStartDate(dateString: unknown): { valid: boolean; error:
 
   const now = new Date();
   now.setHours(0, 0, 0, 0); // Compare dates only, not times
+  
+  const inputDate = new Date(date);
+  inputDate.setHours(0, 0, 0, 0); // Compare dates only, not times
 
-  if (date > now) {
+  if (inputDate > now) {
     return { valid: false, error: 'Cannot simulate future dates' };
   }
 

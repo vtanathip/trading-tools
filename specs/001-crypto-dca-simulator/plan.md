@@ -11,9 +11,9 @@ Build a browser-based Dollar-Cost Averaging (DCA) simulator for cryptocurrency t
 
 ## Technical Context
 
-**Language/Version**: JavaScript ES6+ (modern browsers), React 18.x  
+**Language/Version**: TypeScript 4.x+ (strict mode), React 18.x  
 **Primary Dependencies**: 
-- React 18.x (UI framework - minimal use, prefer vanilla JS)
+- React 18.x (UI framework - minimal use, prefer vanilla TypeScript)
 - Chart.js 4.x (charting library - matches required features: line graphs, tooltips, responsive, multiple datasets)
 - Date picker library (lightweight, e.g., Flatpickr or native input[type="date"])
 - Cryptocurrency price API client (fetch API for CoinGecko or CryptoCompare)

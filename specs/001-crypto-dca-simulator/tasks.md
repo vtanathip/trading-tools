@@ -29,16 +29,18 @@ Based on plan.md, this is a single-page web application with structure:
 
 - [x] T001 Create project directory structure per implementation plan (crypto-dca-simulator/ with src/, tests/, public/ subdirectories)
 - [x] T002 Initialize npm project with package.json and install core dependencies (react@18, react-dom@18, chart.js@4)
-- [x] T003 [P] Install dev dependencies in package.json (vite, eslint, prettier, jest, @testing-library/react, playwright)
-- [x] T004 [P] Create Vite configuration file vite.config.js with React plugin and build settings
-- [x] T005 [P] Configure ESLint in .eslintrc.json with React rules and code quality checks (no-magic-numbers, max-lines-per-function)
+- [x] T003 [P] Install dev dependencies in package.json (vite, eslint, prettier, jest, @testing-library/react, playwright, typescript, @types/react, @types/react-dom)
+- [x] T003a [P] Create tsconfig.json with strict TypeScript configuration (strict: true, noImplicitAny: true, target: ES2020, module: ESNext)
+- [x] T003b [P] Install TypeScript type definitions for Chart.js and other dependencies (@types/chart.js)
+- [x] T004 [P] Create Vite configuration file vite.config.ts with React and TypeScript plugin settings
+- [x] T005 [P] Configure ESLint in .eslintrc.json with React and TypeScript rules (@typescript-eslint/parser, @typescript-eslint/eslint-plugin)
 - [x] T006 [P] Configure Prettier in .prettierrc for consistent formatting
 - [x] T007 [P] Configure Jest in jest.config.js for unit testing with React Testing Library
 - [x] T008 [P] Configure Playwright in playwright.config.ts for integration testing
 - [x] T009 [P] Create .gitignore file excluding node_modules, build, coverage directories
 - [x] T010 Create public/index.html entry point with meta tags and root div
 - [x] T011 [P] Create public/favicon.ico placeholder
-- [x] T012 Create src/index.js entry point that renders React app
+- [x] T012 Create src/index.tsx entry point that renders React app
 - [x] T013 [P] Create initial README.md with project description and setup instructions
 
 ---
@@ -50,16 +52,18 @@ Based on plan.md, this is a single-page web application with structure:
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
 - [x] T014 [P] Create src/styles/main.css with global styles, CSS variables for white theme, typography, and layout
-- [x] T015 [P] Create src/utils/validators.js with input validation functions (date range, investment amount, asset pair format)
-- [x] T016 [P] Create src/utils/formatters.js with number/currency formatting utilities
-- [x] T017 [P] Create src/utils/dateHelpers.js with date manipulation and purchase schedule generation functions
-- [x] T018 Create src/services/cacheManager.js with LocalStorage management (get, set, isValid, clearExpired, evictLRU)
-- [x] T019 Create src/services/priceApi.js with CoinGecko API client (getHistoricalPrices, getCurrentPrice, getCoinsList, rate limiting)
-- [x] T020 Create tests/contract/priceApi.test.js with API contract tests for CoinGecko endpoints
-- [x] T021 Create tests/unit/validators.test.js testing all validation rules from data-model.md
-- [x] T022 [P] Create tests/unit/formatters.test.js testing currency and number formatting edge cases
-- [x] T023 [P] Create tests/unit/dateHelpers.test.js testing date calculations and schedule generation
-- [x] T024 Create tests/unit/cacheManager.test.js testing cache operations, TTL, and LRU eviction
+- [x] T015 [P] Create src/utils/validators.ts with input validation functions (date range, investment amount, asset pair format)
+- [x] T016 [P] Create src/utils/formatters.ts with number/currency formatting utilities
+- [x] T017 [P] Create src/utils/dateHelpers.ts with date manipulation and purchase schedule generation functions
+- [x] T018 Create src/services/cacheManager.ts with LocalStorage management (get, set, isValid, clearExpired, evictLRU)
+- [x] T019 Create src/services/priceApi.ts with CoinGecko API client (getHistoricalPrices, getCurrentPrice, getCoinsList, rate limiting)
+- [x] T020 Create tests/contract/priceApi.test.ts with API contract tests for CoinGecko endpoints
+- [x] T021 Create tests/unit/validators.test.ts testing all validation rules from data-model.md
+- [x] T021a [P] Add future date validation test cases in tests/unit/validators.test.ts for FR-015 compliance (test rejection of future dates)
+- [x] T021b [P] Implement future date validation logic in src/utils/validators.ts to check start date is not after current date
+- [x] T022 [P] Create tests/unit/formatters.test.ts testing currency and number formatting edge cases
+- [x] T023 [P] Create tests/unit/dateHelpers.test.ts testing date calculations and schedule generation
+- [x] T024 Create tests/unit/cacheManager.test.ts testing cache operations, TTL, and LRU eviction
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -73,24 +77,24 @@ Based on plan.md, this is a single-page web application with structure:
 
 ### Critical Service for User Story 1 (100% Coverage Required)
 
-- [x] T025 Create tests/unit/dcaCalculator.test.js with comprehensive test cases (valid inputs, edge cases, missing data, large datasets, boundary conditions) - MUST FAIL initially
-- [x] T026 [US1] Create src/services/dcaCalculator.js implementing DCACalculatorService interface (calculateSimulation, calculatePortfolioValue, generatePurchaseSchedule)
+- [x] T025 Create tests/unit/dcaCalculator.test.ts with comprehensive test cases (valid inputs, edge cases, missing data, large datasets, boundary conditions) - MUST FAIL initially
+- [x] T026 [US1] Create src/services/dcaCalculator.ts implementing DCACalculatorService interface (calculateSimulation, calculatePortfolioValue, generatePurchaseSchedule)
 
 ### Components for User Story 1
 
-- [x] T027 [P] [US1] Create tests/unit/SimulatorForm.test.js testing form validation and submission
-- [x] T028 [P] [US1] Create src/components/SimulatorForm.js with input fields (asset pair dropdown, date picker, amount input, frequency selector) and validation
+- [x] T027 [P] [US1] Create tests/unit/SimulatorForm.test.tsx testing form validation and submission
+- [x] T028 [P] [US1] Create src/components/SimulatorForm.tsx with input fields (asset pair dropdown, date picker, amount input, frequency selector) and validation
 - [x] T029 [P] [US1] Create src/styles/simulator.css with form styles matching white theme
-- [x] T030 [US1] Create tests/unit/ChartDisplay.test.js testing Chart.js rendering and data display
-- [x] T031 [US1] Create src/components/ChartDisplay.js wrapping Chart.js with line graph configuration
+- [x] T030 [US1] Create tests/unit/ChartDisplay.test.tsx testing Chart.js rendering and data display
+- [x] T031 [US1] Create src/components/ChartDisplay.tsx wrapping Chart.js with line graph configuration
 - [x] T032 [P] [US1] Create src/styles/chart.css with chart customization for white theme
-- [x] T033 [P] [US1] Create tests/unit/ResultsSummary.test.js testing metrics display and formatting
-- [x] T034 [P] [US1] Create src/components/ResultsSummary.js displaying total invested, current value, profit/loss, profit/loss percent
+- [x] T033 [P] [US1] Create tests/unit/ResultsSummary.test.tsx testing metrics display and formatting
+- [x] T034 [P] [US1] Create src/components/ResultsSummary.tsx displaying total invested, current value, profit/loss, profit/loss percent
 
 ### Integration for User Story 1
 
-- [x] T035 [US1] Create src/App.js main component integrating SimulatorForm, ChartDisplay, and ResultsSummary with state management
-- [x] T036 [US1] Create tests/integration/simulation.test.js with end-to-end simulation flow test using Playwright
+- [x] T035 [US1] Create src/App.tsx main component integrating SimulatorForm, ChartDisplay, and ResultsSummary with state management
+- [x] T036 [US1] Create tests/integration/simulation.test.ts with end-to-end simulation flow test using Playwright
 - [x] T037 [US1] Verify all acceptance scenarios from spec.md User Story 1 pass
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently - MVP READY
@@ -105,15 +109,15 @@ Based on plan.md, this is a single-page web application with structure:
 
 ### Components for User Story 2
 
-- [ ] T038 [P] [US2] Create tests/unit/AssetComparison.test.js testing multi-asset state management and display
-- [ ] T039 [US2] Create src/components/AssetComparison.js with asset list, add/remove controls, and multi-asset metrics display
-- [ ] T040 [US2] Update src/components/ChartDisplay.js to support multiple datasets with distinct colors (5 asset maximum)
-- [ ] T041 [US2] Update src/components/ResultsSummary.js to display side-by-side metrics for multiple assets
-- [ ] T042 [US2] Update src/App.js to manage AssetComparison state and coordinate multiple simulations
+- [x] T038 [P] [US2] Create tests/unit/AssetComparison.test.tsx testing multi-asset state management and display
+- [x] T039 [US2] Create src/components/AssetComparison.tsx with asset list, add/remove controls, and multi-asset metrics display
+- [x] T040 [US2] Update src/components/ChartDisplay.tsx to support multiple datasets with distinct colors (5 asset maximum)
+- [x] T041 [US2] Update src/components/ResultsSummary.tsx to display side-by-side metrics for multiple assets
+- [x] T042 [US2] Update src/App.tsx to manage AssetComparison state and coordinate multiple simulations
 
 ### Integration for User Story 2
 
-- [ ] T043 [US2] Create tests/integration/comparison.test.js with end-to-end multi-asset comparison flow
+- [ ] T043 [US2] Create tests/integration/comparison.test.ts with end-to-end multi-asset comparison flow
 - [ ] T044 [US2] Verify all acceptance scenarios from spec.md User Story 2 pass
 - [ ] T045 [US2] Test edge case: adding asset with different historical data availability
 
@@ -129,16 +133,16 @@ Based on plan.md, this is a single-page web application with structure:
 
 ### Implementation for User Story 3
 
-- [ ] T046 [P] [US3] Create tests/unit/parameterAdjustment.test.js testing parameter change handling and recalculation
-- [ ] T047 [US3] Update src/components/SimulatorForm.js to support parameter editing after initial simulation
-- [ ] T048 [US3] Add reset functionality to src/components/SimulatorForm.js to restore initial values
-- [ ] T049 [US3] Update src/App.js to detect parameter changes and trigger recalculation
-- [ ] T050 [US3] Optimize src/services/dcaCalculator.js to handle rapid recalculations efficiently
-- [ ] T051 [US3] Add loading states to src/components/ChartDisplay.js for recalculation feedback
+- [ ] T046 [P] [US3] Create tests/unit/parameterAdjustment.test.ts testing parameter change handling and recalculation
+- [ ] T047 [US3] Update src/components/SimulatorForm.tsx to support parameter editing after initial simulation
+- [ ] T048 [US3] Add reset functionality to src/components/SimulatorForm.tsx to restore initial values
+- [ ] T049 [US3] Update src/App.tsx to detect parameter changes and trigger recalculation
+- [ ] T050 [US3] Optimize src/services/dcaCalculator.ts to handle rapid recalculations efficiently
+- [ ] T051 [US3] Add loading states to src/components/ChartDisplay.tsx for recalculation feedback
 
 ### Integration for User Story 3
 
-- [ ] T052 [US3] Create tests/integration/parameterAdjustment.test.js with end-to-end parameter modification flow
+- [ ] T052 [US3] Create tests/integration/parameterAdjustment.test.ts with end-to-end parameter modification flow
 - [ ] T053 [US3] Verify all acceptance scenarios from spec.md User Story 3 pass
 - [ ] T054 [US3] Test rapid parameter changes don't cause race conditions or incorrect calculations
 
@@ -150,8 +154,8 @@ Based on plan.md, this is a single-page web application with structure:
 
 **Purpose**: URL sharing feature that spans all user stories (FR-021, FR-022)
 
-- [ ] T055 Create tests/unit/urlSerializer.test.js testing URL generation and parsing
-- [ ] T056 Create src/services/urlSerializer.js implementing URLSerializerService interface (serialize, deserialize)
+- [ ] T055 Create tests/unit/urlSerializer.test.ts testing URL generation and parsing
+- [ ] T056 Create src/services/urlSerializer.ts implementing URLSerializerService interface (serialize, deserialize)
 - [ ] T057 Add "Share" button to src/components/ResultsSummary.js that generates shareable URL
 - [ ] T058 Update src/App.js to parse URL query parameters on load and restore simulation
 - [ ] T059 Create tests/integration/sharing.test.js with end-to-end URL sharing flow
@@ -277,9 +281,9 @@ Based on plan.md, this is a single-page web application with structure:
 
 ```bash
 # Phase 2: Launch foundational tests together
-Task T021: "tests/unit/validators.test.js"
-Task T022: "tests/unit/formatters.test.js"
-Task T023: "tests/unit/dateHelpers.test.js"
+Task T021: "tests/unit/validators.test.ts"
+Task T022: "tests/unit/formatters.test.ts"
+<parameter name="Task T023: "tests/unit/dateHelpers.test.ts"
 
 # Phase 3: After T025-T026 (DCA Calculator), launch UI components together
 Task T027-T029: "SimulatorForm + tests + styles"

@@ -91,7 +91,7 @@ A trader wants to experiment with different DCA strategies by adjusting the inve
 - **FR-007**: System MUST calculate current portfolio value based on accumulated cryptocurrency holdings at current prices
 - **FR-008**: System MUST calculate profit/loss as both absolute amount and percentage
 - **FR-009**: System MUST display results as a line graph showing investment value over time
-- **FR-009a**: System MUST adapt graph granularity based on time range: daily view for periods under 90 days, weekly view for 90-365 days, monthly view for periods over 1 year
+- **FR-009a**: System MUST adapt graph granularity based on time range: daily view for periods less than 90 days, weekly view for 90-365 days (inclusive), monthly view for periods greater than 1 year
 - **FR-010**: System MUST show individual DCA purchase points on the graph
 - **FR-011**: System MUST allow users to add up to 5 different assets to compare on the same graph
 - **FR-012**: System MUST display each asset with a distinct color on the graph
