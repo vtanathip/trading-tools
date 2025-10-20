@@ -27,19 +27,19 @@ Based on plan.md, this is a single-page web application with structure:
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project directory structure per implementation plan (crypto-dca-simulator/ with src/, tests/, public/ subdirectories)
-- [ ] T002 Initialize npm project with package.json and install core dependencies (react@18, react-dom@18, chart.js@4)
-- [ ] T003 [P] Install dev dependencies in package.json (vite, eslint, prettier, jest, @testing-library/react, playwright)
-- [ ] T004 [P] Create Vite configuration file vite.config.js with React plugin and build settings
-- [ ] T005 [P] Configure ESLint in .eslintrc.json with React rules and code quality checks (no-magic-numbers, max-lines-per-function)
-- [ ] T006 [P] Configure Prettier in .prettierrc for consistent formatting
-- [ ] T007 [P] Configure Jest in jest.config.js for unit testing with React Testing Library
-- [ ] T008 [P] Configure Playwright in playwright.config.ts for integration testing
-- [ ] T009 [P] Create .gitignore file excluding node_modules, build, coverage directories
-- [ ] T010 Create public/index.html entry point with meta tags and root div
-- [ ] T011 [P] Create public/favicon.ico placeholder
-- [ ] T012 Create src/index.js entry point that renders React app
-- [ ] T013 [P] Create initial README.md with project description and setup instructions
+- [x] T001 Create project directory structure per implementation plan (crypto-dca-simulator/ with src/, tests/, public/ subdirectories)
+- [x] T002 Initialize npm project with package.json and install core dependencies (react@18, react-dom@18, chart.js@4)
+- [x] T003 [P] Install dev dependencies in package.json (vite, eslint, prettier, jest, @testing-library/react, playwright)
+- [x] T004 [P] Create Vite configuration file vite.config.js with React plugin and build settings
+- [x] T005 [P] Configure ESLint in .eslintrc.json with React rules and code quality checks (no-magic-numbers, max-lines-per-function)
+- [x] T006 [P] Configure Prettier in .prettierrc for consistent formatting
+- [x] T007 [P] Configure Jest in jest.config.js for unit testing with React Testing Library
+- [x] T008 [P] Configure Playwright in playwright.config.ts for integration testing
+- [x] T009 [P] Create .gitignore file excluding node_modules, build, coverage directories
+- [x] T010 Create public/index.html entry point with meta tags and root div
+- [x] T011 [P] Create public/favicon.ico placeholder
+- [x] T012 Create src/index.js entry point that renders React app
+- [x] T013 [P] Create initial README.md with project description and setup instructions
 
 ---
 
@@ -49,12 +49,12 @@ Based on plan.md, this is a single-page web application with structure:
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T014 [P] Create src/styles/main.css with global styles, CSS variables for white theme, typography, and layout
-- [ ] T015 [P] Create src/utils/validators.js with input validation functions (date range, investment amount, asset pair format)
-- [ ] T016 [P] Create src/utils/formatters.js with number/currency formatting utilities
-- [ ] T017 [P] Create src/utils/dateHelpers.js with date manipulation and purchase schedule generation functions
-- [ ] T018 Create src/services/cacheManager.js with LocalStorage management (get, set, isValid, clearExpired, evictLRU)
-- [ ] T019 Create src/services/priceApi.js with CoinGecko API client (getHistoricalPrices, getCurrentPrice, getCoinsList, rate limiting)
+- [x] T014 [P] Create src/styles/main.css with global styles, CSS variables for white theme, typography, and layout
+- [x] T015 [P] Create src/utils/validators.js with input validation functions (date range, investment amount, asset pair format)
+- [x] T016 [P] Create src/utils/formatters.js with number/currency formatting utilities
+- [x] T017 [P] Create src/utils/dateHelpers.js with date manipulation and purchase schedule generation functions
+- [x] T018 Create src/services/cacheManager.js with LocalStorage management (get, set, isValid, clearExpired, evictLRU)
+- [x] T019 Create src/services/priceApi.js with CoinGecko API client (getHistoricalPrices, getCurrentPrice, getCoinsList, rate limiting)
 - [ ] T020 Create tests/contract/priceApi.test.js with API contract tests for CoinGecko endpoints
 - [ ] T021 Create tests/unit/validators.test.js testing all validation rules from data-model.md
 - [ ] T022 [P] Create tests/unit/formatters.test.js testing currency and number formatting edge cases
