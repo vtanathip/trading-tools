@@ -1,6 +1,4 @@
-# Azure Blob Storage Deployment Script for Crypto DCA Simulator (PowerShell)
-# Usage: .\deploy-azure.ps1 [StorageAccountName] [ResourceGroup]
-
+﻿# Azure Blob Storage Deployment Script
 param(
     [string]$StorageAccountName = "cryptodca$(Get-Date -Format 'yyyyMMddHHmm')",
     [string]$ResourceGroup = "rg-crypto-dca-simulator",
@@ -9,90 +7,62 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "🚀 Starting Azure Blob Storage deployment for Crypto DCA Simulator" -ForegroundColor Green
-Write-Host "Storage Account: $StorageAccountName" -ForegroundColor Cyan
+Write-Host "[INFO] Starting deployment" -ForegroundColor Green
+Write-Host "Storage: $StorageAccountName" -ForegroundColor Cyan
 Write-Host "Resource Group: $ResourceGroup" -ForegroundColor Cyan
-Write-Host "Location: $Location" -ForegroundColor Cyan
 
-# Check if Azure CLI is installed
+# Check Azure CLI
 try {
     $null = Get-Command az -ErrorAction Stop
 } catch {
-    Write-Host "❌ Azure CLI is not installed. Please install it first:" -ForegroundColor Red
-    Write-Host "https://docs.microsoft.com/en-us/cli/azure/install-azure-cli" -ForegroundColor Yellow
+    Write-Host "[ERROR] Azure CLI not installed" -ForegroundColor Red
     exit 1
 }
 
-# Check if logged in to Azure
+# Check login
 try {
     $null = az account show 2>$null
     if ($LASTEXITCODE -ne 0) { throw }
 } catch {
-    Write-Host "❌ Please log in to Azure CLI first:" -ForegroundColor Red
-    Write-Host "az login" -ForegroundColor Yellow
+    Write-Host "[ERROR] Please run: az login" -ForegroundColor Red
     exit 1
 }
 
-# Create resource group if it doesn't exist
-Write-Host "📁 Creating resource group..." -ForegroundColor Yellow
+# Create resource group
+Write-Host "[1/6] Creating resource group..." -ForegroundColor Yellow
 az group create --name $ResourceGroup --location $Location --output table
 
 # Deploy ARM template
-Write-Host "🏗️  Deploying storage account..." -ForegroundColor Yellow
-az deployment group create `
-    --resource-group $ResourceGroup `
-    --template-file azure-deploy.json `
-    --parameters storageAccountName=$StorageAccountName `
-    --output table
+Write-Host "[2/6] Deploying storage account..." -ForegroundColor Yellow
+az deployment group create --resource-group $ResourceGroup --template-file azure-deploy.json --parameters storageAccountName=$StorageAccountName --output table
 
-# Enable static website hosting
-Write-Host "🌐 Enabling static website hosting..." -ForegroundColor Yellow
-az storage blob service-properties update `
-    --account-name $StorageAccountName `
-    --static-website `
-    --index-document index.html `
-    --404-document index.html
+# Enable static website
+Write-Host "[3/6] Enabling static website..." -ForegroundColor Yellow
+az storage blob service-properties update --account-name $StorageAccountName --static-website --index-document index.html --404-document index.html
 
-# Build the application
-Write-Host "🔨 Building production application..." -ForegroundColor Yellow
+# Build application
+Write-Host "[4/6] Building application..." -ForegroundColor Yellow
 if (-not (Test-Path "package.json")) {
-    Write-Host "❌ package.json not found. Please run this script from the crypto-dca-simulator directory." -ForegroundColor Red
+    Write-Host "[ERROR] package.json not found" -ForegroundColor Red
     exit 1
 }
-
 npm run build
 
-# Check if build directory exists
-$BuildDir = "./build"
-if (-not (Test-Path $BuildDir)) {
-    Write-Host "❌ Build directory not found at $BuildDir" -ForegroundColor Red
+# Check build
+if (-not (Test-Path "./build")) {
+    Write-Host "[ERROR] Build directory not found" -ForegroundColor Red
     exit 1
 }
 
-# Upload files to Azure Blob Storage
-Write-Host "📤 Uploading files to Azure Blob Storage..." -ForegroundColor Yellow
-az storage blob upload-batch `
-    --account-name $StorageAccountName `
-    --destination '$web' `
-    --source $BuildDir `
-    --pattern "*" `
-    --overwrite
+# Upload files
+Write-Host "[5/6] Uploading files..." -ForegroundColor Yellow
+az storage blob upload-batch --account-name $StorageAccountName --destination '$web' --source ./build --pattern "*" --overwrite
 
-# Get the website URL
-$WebsiteUrl = az storage account show `
-    --name $StorageAccountName `
-    --resource-group $ResourceGroup `
-    --query "primaryEndpoints.web" `
-    --output tsv
+# Get URL
+Write-Host "[6/6] Getting website URL..." -ForegroundColor Yellow
+$WebsiteUrl = az storage account show --name $StorageAccountName --resource-group $ResourceGroup --query "primaryEndpoints.web" --output tsv
 
+Write-Host "" -ForegroundColor Green
+Write-Host "SUCCESS! Deployment completed" -ForegroundColor Green
+Write-Host "Website URL: $WebsiteUrl" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "✅ Deployment completed successfully!" -ForegroundColor Green
-Write-Host "🌍 Website URL: $WebsiteUrl" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "📋 Next steps:" -ForegroundColor Yellow
-Write-Host "1. Visit the website URL to verify deployment" -ForegroundColor White
-Write-Host "2. Configure custom domain if needed" -ForegroundColor White
-Write-Host "3. Set up CDN for better performance (optional)" -ForegroundColor White
-Write-Host ""
-Write-Host "💡 To update the website, simply run this script again." -ForegroundColor Blue
-Write-Host "💰 Storage costs: ~$0.02/month for small static sites" -ForegroundColor Blue
