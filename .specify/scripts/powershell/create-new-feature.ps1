@@ -80,6 +80,8 @@ $specsDir = Join-Path $repoRoot 'specs'
 New-Item -ItemType Directory -Path $specsDir -Force | Out-Null
 
 $highest = 0
+
+# Check specs directory for existing feature numbers
 if (Test-Path $specsDir) {
     Get-ChildItem -Path $specsDir -Directory | ForEach-Object {
         if ($_.Name -match '^(\d{3})') {
@@ -88,6 +90,25 @@ if (Test-Path $specsDir) {
         }
     }
 }
+
+# Also check Git branches for existing feature numbers (if Git is available)
+if ($hasGit) {
+    try {
+        $branches = git branch -a 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            $branches | ForEach-Object {
+                $branch = $_.Trim() -replace '^\*\s+', '' -replace '^remotes/[^/]+/', ''
+                if ($branch -match '^(\d{3})-') {
+                    $num = [int]$matches[1]
+                    if ($num -gt $highest) { $highest = $num }
+                }
+            }
+        }
+    } catch {
+        # Silently continue if git branch check fails
+    }
+}
+
 $next = $highest + 1
 $featureNum = ('{0:000}' -f $next)
 
